@@ -1,0 +1,8 @@
+<?php
+require_once '../includes/db.php'; require_once '../includes/functions.php'; require_admin(); $error="";
+if($_SERVER['REQUEST_METHOD']==='POST'){
+$n=trim($_POST['name']);$c=trim($_POST['category']);$p=(float)$_POST['price'];$d=trim($_POST['description']);$e=trim($_POST['emoji']);$s=$_POST['status'];
+if($n===''||$c===''||$p<0)$error="Please enter valid item details.";else{$st=$conn->prepare("INSERT INTO items(name,category,price,description,emoji,status) VALUES(?,?,?,?,?,?)");$st->bind_param("ssdsss",$n,$c,$p,$d,$e,$s);$st->execute();header("Location: dashboard.php");exit;}
+}
+?>
+<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Add Item</title><link rel="stylesheet" href="../css/style.css"></head><body><?php include '../includes/header.php';?><main class="container form-page"><h2>Add Food Item</h2><?php if($error):?><div class="alert"><?=e($error)?></div><?php endif;?><form method="post" class="form-card"><label>Name<input name="name" required></label><label>Category<input name="category" required></label><label>Price<input type="number" name="price" step="0.01" min="0" required></label><label>Description<textarea name="description"></textarea></label><label>Emoji<input name="emoji" placeholder="🍔"></label><label>Status<select name="status"><option value="available">available</option><option value="unavailable">unavailable</option></select></label><button class="btn">Add Item</button></form></main><?php include '../includes/footer.php';?></body></html>

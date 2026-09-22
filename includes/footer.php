@@ -1,0 +1,1 @@
+<footer><div class="container"><p>&copy; 2026 FoodHub Food Ordering System</p><a href="contact.php">Contact Us</a></div></footer>

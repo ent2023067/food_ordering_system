@@ -1,0 +1,9 @@
+<?php
+require_once '../includes/db.php'; require_once '../includes/functions.php'; require_admin(); $id=(int)($_GET['id']??0);
+$st=$conn->prepare("SELECT * FROM items WHERE id=?");$st->bind_param("i",$id);$st->execute();$item=$st->get_result()->fetch_assoc();if(!$item)die("Item not found.");
+if($_SERVER['REQUEST_METHOD']==='POST'){
+$n=trim($_POST['name']);$c=trim($_POST['category']);$p=(float)$_POST['price'];$d=trim($_POST['description']);$e=trim($_POST['emoji']);$s=$_POST['status'];
+$up=$conn->prepare("UPDATE items SET name=?,category=?,price=?,description=?,emoji=?,status=? WHERE id=?");$up->bind_param("ssdsssi",$n,$c,$p,$d,$e,$s,$id);$up->execute();header("Location: dashboard.php");exit;
+}
+?>
+<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Edit Item</title><link rel="stylesheet" href="../css/style.css"></head><body><?php include '../includes/header.php';?><main class="container form-page"><h2>Edit Food Item</h2><form method="post" class="form-card"><label>Name<input name="name" value="<?=e($item['name'])?>" required></label><label>Category<input name="category" value="<?=e($item['category'])?>" required></label><label>Price<input type="number" step="0.01" min="0" name="price" value="<?=e($item['price'])?>" required></label><label>Description<textarea name="description"><?=e($item['description'])?></textarea></label><label>Emoji<input name="emoji" value="<?=e($item['emoji'])?>"></label><label>Status<select name="status"><option <?= $item['status']==='available'?'selected':''?>>available</option><option <?= $item['status']==='unavailable'?'selected':''?>>unavailable</option></select></label><button class="btn">Save Changes</button></form></main><?php include '../includes/footer.php';?></body></html>
