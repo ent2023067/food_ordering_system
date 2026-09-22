@@ -1,7 +1,9 @@
 <?php
-$script_dir = dirname(str_replace('\\', '/', $_SERVER['SCRIPT_NAME'] ?? ''));
+$script_name = str_replace('\\', '/', $_SERVER['SCRIPT_NAME'] ?? '');
+$script_dir = dirname($script_name);
 $base_path = in_array(basename($script_dir), ['auth', 'admin'], true) ? dirname($script_dir) : $script_dir;
-$base_path = $base_path === '/' || $base_path === '.' ? '' : rtrim($base_path, '/');
+$base_path = trim(str_replace('\\', '/', $base_path), '/');
+$base_path = $base_path === '' ? '' : '/' . $base_path;
 ?>
 <header class="header">
 <div class="container nav">
